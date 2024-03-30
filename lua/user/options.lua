@@ -48,24 +48,60 @@ lvim.builtin.telescope.defaults.layout_config = {
   height = 0.6,
   preview_cutoff = 120,
 }
+lvim.builtin.telescope.defaults.preview=true
+lvim.builtin.telescope.defaults.file_ignore_patterns = { "node_modules", ".git" }
+lvim.builtin.telescope.defaults.layout_strategy = "horizontal"
+
+
+
+
 lvim.builtin.telescope.on_config_done = function(telescope)
   pcall(telescope.load_extension, "frecency")
   pcall(telescope.load_extension, "neoclip")
   pcall(telescope.load_extension, "fzy_native")
   pcall(telescope.load_extension, "aerial")
+  pcall(telescope.load_extension, "material")
 end
 
 lvim.plugins = {
+  -- COLOR Schemes --
+  {
+    'marko-cerovac/material.nvim'
+  },
+  {
+  "peterhoeg/vim-qml",
+  event = "BufRead",
+  ft = { "qml" },
+},
+  {
+    "tokyonight.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {},
+  },
   {
     "folke/trouble.nvim",
     cmd = "TroubleToggle",
   },
   {
-    "romgrk/fzy-lua-native",
+    "norcalli/nvim-colorizer.lua",
+    config = function()
+      require("colorizer").setup()
+    end,
+
   },
   {
-    's1n7ax/nvim-window-picker',
+    "romgrk/fzy-lua-native",
   },
+{
+    's1n7ax/nvim-window-picker',
+    name = 'window-picker',
+    event = 'VeryLazy',
+    version = '2.*',
+    config = function()
+        require'window-picker'.setup()
+    end,
+},
   {
     "kylechui/nvim-surround",
     version = "*", -- Use for stability; omit to use `main` branch for the latest features
@@ -139,17 +175,17 @@ lvim.plugins = {
   {
     "gelguy/wilder.nvim",
   },
-  {
-    "jackMort/ChatGPT.nvim",
-    config = function()
-      require("chatgpt").setup()
-    end,
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-telescope/telescope.nvim",
-      "nvim-telescope/telescope-fzy-native.nvim",
-    },
-  },
+  -- {
+  --   "jackMort/ChatGPT.nvim",
+  --   config = function()
+  --     require("chatgpt").setup()
+  --   end,
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --     "nvim-telescope/telescope.nvim",
+  --     "nvim-telescope/telescope-fzy-native.nvim",
+  --   },
+  -- },
   {
     'stevearc/aerial.nvim',
   }

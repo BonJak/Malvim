@@ -1,6 +1,10 @@
 -- --- disable automatic installation of servers
 lvim.lsp.installer.setup.automatic_installation = false
 
+vim.opt.termguicolors = true
+vim.opt.foldmethod = "expr" -- default is "normal"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()" -- default is ""
+vim.opt.foldenable = false -- if this option is
 -- ---configure a server manually. IMPORTANT: Requires `:LvimCacheReset` to take effect
 -- ---see the full default list `:lua =lvim.lsp.automatic_configuration.skipped_servers`
 -- vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright", "clangd", "tsserver" })
@@ -75,10 +79,15 @@ require("user.aerialcfg")
 
 require("user.custom")
 require("user.keymapping")
-require("user.chatgptcfg")
+-- require("user.chatgptcfg")
 
 require("user.formatters")
 require("user.linters")
 require("user.lsp")
 
 require("user.autocmds")
+require("user.colorizercfg")
+vim.g.material_style = "deep ocean"
+
+lvim.lsp.installer.setup.ensure_installed = { "eslint" }
+

@@ -12,7 +12,7 @@ require('smart-splits').setup({
 
   resize_mode = {
     quit_key = '<ESC>',
-    resize_keys = { 'h', '\\.', ',', 'l' },
+    resize_keys = { 'h',',', '\\.',  'l' },
     silent = false,
     hooks = {
       on_enter = nil,

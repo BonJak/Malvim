@@ -1,3 +1,4 @@
+local M={}
 local util = require('lspconfig').util
 
 local pyLSP = {

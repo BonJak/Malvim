@@ -4,6 +4,62 @@ function _G.lsp_definition_split()
   vim.lsp.buf.definition()
 end
 
+-- function _G.pick_window_lsp()
+--   local window_id = require('window-picker').pick_window()
+--   if window_id then
+--     vim.api.nvim_set_current_win(window_id)
+--   end
+
+--   vim.lsp.buf.definition()
+
+-- end
+
+function _G.pick_window_lsp()
+  local params = vim.lsp.util.make_position_params()
+  -- print("params")
+  -- print(vim.inspect(params))
+  -- print(params)
+  local results_lsp, err = vim.lsp.buf_request_sync(0, 'textDocument/definition', params, 500)
+  local filetype = vim.api.nvim_buf_get_option(0, 'filetype')
+  -- get count of all open buffers
+
+
+  if not results_lsp or err then
+    print("Error fetching declaration")
+    return
+  end
+
+  local result = nil
+
+  for _, lsp_result in pairs(results_lsp) do
+    if lsp_result.result and lsp_result.result[1] then
+      result = lsp_result.result[1]
+      break
+    end
+  end
+
+
+  if not result then
+    print("No declaration found")
+    return
+  end
+
+  local uri = result.uri
+  local bufnr = vim.uri_to_bufnr(uri)
+  local range = result.range
+  local start_line = range.start.line
+  local window_id = require('window-picker').pick_window()
+  if window_id then
+    vim.api.nvim_set_current_win(window_id)
+  end
+
+  vim.fn.bufload(bufnr)
+
+
+  vim.api.nvim_win_set_buf(0, bufnr)
+  vim.api.nvim_win_set_cursor(0, { start_line + 1, 0 })
+end
+
 -- Conflicts
 lvim.builtin.autopairs.fast_wrap.map = "<C-e>"
 
@@ -21,6 +77,7 @@ lvim.keys.normal_mode["<A-,>"] = '<cmd>lua require("smart-splits").resize_down()
 lvim.keys.normal_mode["<A-0>"] = '<C-w>w'
 lvim.keys.normal_mode["<A-9>"] = '<C-w>W'
 lvim.keys.normal_mode["gp"] = "<cmd>lua show_floating_declaration()<CR>"
+lvim.keys.normal_mode["g8"] = "<cmd>lua pick_window_lsp()<CR>"
 
 -- lvim.keys.
 lvim.keys.insert_mode["<leader><leader>"] = "<Esc>"
@@ -135,6 +192,9 @@ lvim.builtin.which_key.vmappings["i"] = {
   },
 }
 
+-- create a mapping <leader>n that goest to matching pair like nnoremap <leader>n %
+vim.api.nvim_set_keymap("n", "<leader>x", "%", { noremap = true, silent = true })
+
 lvim.builtin.which_key.mappings["i"] = {
   name = "Chat GPT",
   ["c"] = { "<cmd>ChatGPT<CR>", "Chat" },
@@ -160,5 +220,11 @@ lvim.builtin.which_key.mappings["i"] = {
 lvim.builtin.which_key.mappings['H'] = { ":LocalHistoryToggle<CR>", "Toggle local history" }
 
 lvim.builtin.which_key.mappings["k"] = {
-  ["i"] = { "?^import<CR>o", "Go to last line containing import" }
+  ["i"] = { "?^import<CR>o", "Go to last line containing import" },
+  ["k"] = {"%", "Go to matching braces"}
+}
+
+lvim.builtin.which_key.mappings["y"] = {
+  -- copy current line below
+  ["y"] = { "<cmd>t.<CR>", "Copy current line below" },
 }

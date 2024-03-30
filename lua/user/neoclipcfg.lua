@@ -1,5 +1,5 @@
 require("neoclip").setup({
-  history = 100,
+  history = 10,
   enable_persistent_history = true,
   length_limit = 1048576,
   continuous_sync = false,

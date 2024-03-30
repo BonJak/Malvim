@@ -2,6 +2,7 @@ local formatters = require("lvim.lsp.null-ls.formatters")
 formatters.setup({
   {
     exe = "prettier",
+    args = { "--print-width=120" },
     filetypes = {
       "javascriptreact",
       "javascript",
@@ -9,6 +10,10 @@ formatters.setup({
       "typescript",
       "json",
       "markdown",
+      "html",
+      "css",
+      "yaml",
+      "qml"
     },
   },
   {
